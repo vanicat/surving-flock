@@ -1,8 +1,9 @@
-const MAXSPEED = 3;
-const MAXFORCE = 0.1;
-const DESIREDSEP = 30.0;
+const MAXSPEED = 30;
+const MAXFORCE = 10;
+const DESIREDSEP = 20.0;
 
-const NEIGHBORDIST = 100;
+const NEIGHBORDIST = 50;
+const CONTROLDIST = 1000;
 
 function multArray(a, x) {
     for (let i = 0; i<a.length; i++) {
@@ -17,20 +18,22 @@ function addArray(a, b) {
 }
 
 function boid_accel(boid, group) {
+    //if (boid === group.children.entries[0]) debugger;
     let sep = separate(boid, group);   // Separation
     let ali = align(boid, group);      // Alignment
     let coh = cohesion(boid, group);   // Cohesion
     let cont = control(boid);
 
-    sep.scale(1.5);
-    ali.scale(1.0);
-    coh.scale(1);
-    cont.scale(1);
+    sep.scale(10);
+    ali.scale(4);
+    coh.scale(5);
+    cont.scale(20);
 
     boid.body.setAcceleration(0);
-
     boid.body.acceleration.add(sep);
+    
     boid.body.acceleration.add(ali);
+    
     boid.body.acceleration.add(coh);
     boid.body.acceleration.add(cont);
     
@@ -63,7 +66,7 @@ function seek(boid, target) {
     desired.scale(-MAXSPEED);
 
     let pull = desired;
-    pull.add(boid.body.velocity.clone());
+    pull.subtract(boid.body.velocity.clone());
 
     limitVector(pull, MAXFORCE);
     // console.log(pull);  
@@ -160,6 +163,7 @@ function cohesion(boid, group) {
 
 function control(boid) {
     let d = boid.body.position.distance(game.input.pointers[0].position);
+    return seek(boid, game.input.pointers[0].position);
     if (d < CONTROLDIST) {
         return seek(boid, game.input.pointers[0].position);
     }  else {
