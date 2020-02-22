@@ -160,14 +160,8 @@ function cohesion(boid, group) {
 
 function control(boid) {
     let d = boid.body.position.distance(game.input.pointers[0].position);
-    if (d < NEIGHBORDIST) {
-        let steer = game.input.pointers[0].position.clone();
-        steer.subtract(boid.body.position);
-        steer.normalize();
-        steer.scale(MAXSPEED);
-        steer.subtract(boid.body.velocity);
-        limitVector(steer, MAXFORCE);
-        return steer;
+    if (d < CONTROLDIST) {
+        return seek(boid, game.input.pointers[0].position);
     }  else {
         return new Phaser.Math.Vector2(0, 0);
     }
