@@ -5,7 +5,7 @@ var config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 0 }
+            //debug: true,
         }
     },
     scene: {
@@ -38,7 +38,8 @@ function create ()
 
 
         let newobj = this.flock.create(x, y, 'fish');
-        console.log(newobj);
+
+        newobj.setMaxVelocity(40);
     }
     flock(this.flock);
 }
