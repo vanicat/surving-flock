@@ -60,10 +60,9 @@ function seek(boid, target) {
 
     desired.normalize();
 
-    desired.scale(MAXSPEED);
+    desired.scale(-MAXSPEED);
 
     let pull = desired;
-    pull.negate();
     pull.add(boid.body.velocity.clone());
 
     limitVector(pull, MAXFORCE);
