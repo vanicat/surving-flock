@@ -1,9 +1,9 @@
-const MAXSPEED = 30;
+const MAXSPEED = 60;
 const MAXFORCE = 10;
 const DESIREDSEP = 20.0;
 
-const NEIGHBORDIST = 50;
-const CONTROLDIST = 1000;
+const NEIGHBORDIST = 100;
+const CONTROLDIST = 200;
 
 function multArray(a, x) {
     for (let i = 0; i<a.length; i++) {
@@ -18,33 +18,24 @@ function addArray(a, b) {
 }
 
 function boid_accel(boid, group) {
-    //if (boid === group.children.entries[0]) debugger;
+    // if (boid === group.children.entries[0]) debugger;
     let sep = separate(boid, group);   // Separation
     let ali = align(boid, group);      // Alignment
     let coh = cohesion(boid, group);   // Cohesion
     let cont = control(boid);
 
-    sep.scale(10);
+    sep.scale(30);
     ali.scale(4);
-    coh.scale(5);
-    cont.scale(20);
+    coh.scale(8);
+    cont.scale(25);
 
-    boid.body.setAcceleration(0);
+    boid.body.acceleration.setToPolar(Phaser.Math.RND.angle(), Phaser.Math.RND.realInRange(0,5));
     boid.body.acceleration.add(sep);
     
     boid.body.acceleration.add(ali);
     
     boid.body.acceleration.add(coh);
-    boid.body.acceleration.add(cont);
-    
-    // console.log(boid.body.acceleration);
-
-    // let force = new Phaser.Math.Vector2(0, 0);
-    // force.add(sep);
-    // force.add(ali);
-    // force.add(coh);
-
-    // boid.setAcceleration(force[0], force[1]);    
+    boid.body.acceleration.add(cont);  
 }
 
 
@@ -87,9 +78,8 @@ function separate(boid, group) {
     group.children.iterate(function (other) {
         if (other !== boid) {
             let d = boid.body.position.distance(other.body.position);
-            if ((d < DESIREDSEP)) {
-                let diff = new Phaser.Math.Vector2();
-                diff.copy(boid.body.position);
+            if ((d > 0) && (d < DESIREDSEP)) {
+                let diff = boid.body.position.clone();
                 diff.subtract(other.body.position);
                 diff.normalize();
                 diff.scale(1/d);        // Weight by distance
@@ -124,7 +114,7 @@ function align(boid, group) {
     let sum = new Phaser.Math.Vector2(0, 0);
     let count = 0;
     group.children.iterate(function(other) {
-        d = boid.body.position.distance(other.body.position);
+        let d = boid.body.position.distance(other.body.position);
         if ((d > 0) && (d < NEIGHBORDIST)) {
             sum.add(other.body.velocity);
             count++;
@@ -162,11 +152,16 @@ function cohesion(boid, group) {
 }
 
 function control(boid) {
-    let d = boid.body.position.distance(game.input.pointers[0].position);
-    return seek(boid, game.input.pointers[0].position);
+    let d = boid.body.position.distance(game.input.activePointer.position);
     if (d < CONTROLDIST) {
-        return seek(boid, game.input.pointers[0].position);
-    }  else {
+        let s = seek(boid, game.input.mousePointer.position);
+        if (d < NEIGHBORDIST) {
+            return new Phaser.Math.Vector2(s.y, -s.x);
+        } else {
+            return s;
+        }
+    } else {
+
         return new Phaser.Math.Vector2(0, 0);
     }
 }
