@@ -1,3 +1,1 @@
-
-game art :
-https://opengameart.org/content/swimming-whale
+javascript vector: https://github.com/tronkko/js-vector/tree/master/js
