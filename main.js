@@ -1,5 +1,6 @@
 var game;
 
+
 var Starter = new Phaser.Class({
     Extends: Phaser.Scene,
 
@@ -193,7 +194,7 @@ function makeShark() {
 var config = {
     type: Phaser.AUTO,
     width: 1024,
-    height: 768,
+    height: 700,
     physics: {
         default: 'arcade',
         arcade: {
