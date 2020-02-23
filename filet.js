@@ -25,16 +25,19 @@ class Filet {
         rect1.depth = -1;
         this.group.add(rect1);
         rect1.body.immovable = true;
+        this.rect1 = rect1;
         
         let rect2 = new Phaser.GameObjects.Rectangle(this.game, bigrect.centerX, bigrect.bottom-10, bigrect.width, 20);
         rect2.depth = -1;
         this.group.add(rect2);
         rect2.body.immovable = true;
+        this.rect2 = rect2;
 
         let rect3 = new Phaser.GameObjects.Rectangle(this.game, bigrect.left + 10, bigrect.centerY, 20, bigrect.height);
         rect3.depth = -1;
         this.group.add(rect3);
         rect3.body.immovable = true;
+        this.rect3 = rect3;
 
         this.game.physics.add.collider(rect1, this.game.flock);
         this.game.physics.add.collider(rect2, this.game.flock);
@@ -57,10 +60,22 @@ class Filet {
                 }
             }
         })
-        if(this.game.physics.world.bounds.right < this.widget.getBounds().left) {
-
-        }
     }
 
+    moveTo(x, y) {
+        this.widget.x = x;
+        this.widget.y = y;
+
+        let bigrect = this.widget.getBounds();
+
+        this.rect1.x = bigrect.centerX;
+        this.rect1.y = bigrect.top+10;
+        
+        this.rect2.x = bigrect.centerX;
+        this.rect2.y = bigrect.bottom-10;
+        
+        this.rect3.x = bigrect.left + 10;
+        this.rect3.y = bigrect.centerY;
+    }
 
 }
