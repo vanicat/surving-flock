@@ -13,7 +13,8 @@ var config = {
         create: create,
         update: update
     },
-    numFish: 30
+    numFish: 30,
+    parent: "game"
 };
 
 var game;
