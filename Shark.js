@@ -52,7 +52,7 @@ class Shark {
 
     capture(flock) {
         let mouth = this.mouth;
-        flock.children.iterate(function (fish) {
+        flock.children.each(function (fish) {
             if (Phaser.Geom.Rectangle.Contains(mouth.getBounds(), fish.x, fish.y)) {
                 fish.destroy()
             }
