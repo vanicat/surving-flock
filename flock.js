@@ -1,4 +1,4 @@
-const MAXSPEED = 60;
+const MAXSPEED = 70;
 const MAXFORCE = 10;
 const DESIREDSEP = 20.0;
 
