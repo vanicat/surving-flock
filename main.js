@@ -27,6 +27,7 @@ function preload ()
 {
     this.load.image('fish', 'assets/poisson-carre.png');
     this.load.image('filet', 'assets/filet1.png');
+    this.load.image('shark', 'assets/requin.png');
     this.load.image('background', 'assets/fond.png');
 }
 
@@ -57,6 +58,11 @@ function create ()
         callback: makeFilet,
         callbackScope: this
     })
+    this.firstSharkTimer = this.time.addEvent({
+        delay: 10000, // TODO: change that
+        callback: makeShark,
+        callbackScope: this
+    })
 }
 
 function makeFilet() {
@@ -69,6 +75,20 @@ function makeFilet() {
 
 }
 
+function makeShark() {
+    if (! this.shark) {
+        this.shark = new Shark(this);
+        this.shark.getLost = makeShark;
+    }
+    if (this.flock.countActive() > 0) {
+        let i = Phaser.Math.Between(0, this.flock.countActive() - 1);
+        let x = this.flock.getChildren()[i].x;
+        this.shark.moveTo(x, config.height);
+    } else {
+        this.shark.moveTo(game.input.mousePointer.x, config.height);
+    };
+    this.enemies.push(this.shark);
+}
 
 function update (time, delta)
 {
