@@ -45,13 +45,12 @@ var Menu =  new Phaser.Class({
         color.random(50);
 
 
-        let startButton = this.add.text(this.physics.world.bounds.centerX, 16, 'Start Game', config.textStyle);
+        let startButton = this.add.text(this.physics.world.bounds.centerX-200, 300, 'Click to start Start Game', config.textStyle);
         this.physics.add.existing(startButton);
-        startButton.setInteractive();
         startButton.body.immovable = true
 
         let scene = this.scene
-        startButton.on('pointerdown', function (pointer) {
+        this.input.once('pointerup', function (pointer) {
             scene.start("game");
         })
 
