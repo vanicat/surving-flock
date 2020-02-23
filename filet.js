@@ -78,4 +78,8 @@ class Filet {
         this.rect3.y = bigrect.centerY;
     }
 
+    getBounds() {
+        return this.widget.getBounds();
+    }
+
 }
