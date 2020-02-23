@@ -64,7 +64,7 @@ function makeFilet() {
         this.filet = new Filet(this);
         this.getLost = makeFilet;
     }
-    this.filet.moveTo(-20, Phaser.Math.Between(0, config.height));
+    this.filet.moveTo(-20, Phaser.Math.Between(this.filet.getBounds().height/2, config.height - this.filet.getBounds().height/2));
     this.enemies.push(this.filet);
 
 }
