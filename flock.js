@@ -168,10 +168,10 @@ function control(boid) {
 
 function remove_far(scene, flock) {
     let bounds = scene.physics.world.bounds;
-    let rect = new Phaser.Geom.Rectangle(bounds.x - 200, bounds.y - 200, bounds.width + 2*200, bounds.height + 2*200);
+    let rect = new Phaser.Geom.Rectangle(bounds.x - 100, bounds.y - 100, bounds.width + 2*100, bounds.height + 2*100);
     flock.children.each(function (fish) {
         if (! rect.contains(fish.x, fish.y)) {
-            flock.remove(fish);
+            fish.destroy();
         }
     })
 }
