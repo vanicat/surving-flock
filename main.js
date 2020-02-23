@@ -31,7 +31,11 @@ function preload ()
 
 function create ()
 {
+    this.score = 0;
+
     this.add.image(config.width/2, config.height/2, 'background');
+    this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+
     this.flock = this.physics.add.group();
     
     for (let i = 0; i < config.numFish; i++) {
@@ -49,9 +53,11 @@ function create ()
     this.filet = new Filet(this);
 }
 
-function update ()
+function update (time, delta)
 {
     flock(this.flock);
     this.filet.capture(this.flock);
     remove_far(this, this.flock);
+    this.score += this.flock.countActive() * delta/1000;
+    this.scoreText.setText('Score: ' + Math.ceil(this.score));
 }
