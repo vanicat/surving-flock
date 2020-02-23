@@ -42,15 +42,16 @@ function create ()
 
         newobj.setBounce(1);
         newobj.setCircle(newobj.width/2);
-        newobj.setScale(0.5);
+        newobj.setScale(0.05);
     }
     this.physics.add.collider(this.flock, this.flock)
     flock(this.flock);
     this.filet = new Filet(this);
-    console.log(this.filet);
 }
 
 function update ()
 {
     flock(this.flock);
+    this.filet.capture(this.flock);
+    remove_far(this, this.flock);
 }

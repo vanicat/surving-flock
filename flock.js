@@ -165,3 +165,13 @@ function control(boid) {
         return new Phaser.Math.Vector2(0, 0);
     }
 }
+
+function remove_far(scene, flock) {
+    let bounds = scene.physics.world.bounds;
+    let rect = new Phaser.Geom.Rectangle(bounds.x - 200, bounds.y - 200, bounds.width + 2*200, bounds.height + 2*200);
+    flock.children.each(function (fish) {
+        if (! rect.contains(fish.x, fish.y)) {
+            flock.remove(fish);
+        }
+    })
+}

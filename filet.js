@@ -7,6 +7,9 @@ class Filet {
         this.group = this.game.physics.add.group();
 
         let widget = this.game.physics.add.image(this.x, this.y, "filet"); // do it at random
+
+        this.widget = widget
+
         this.group.add(widget);
 
 
@@ -43,6 +46,20 @@ class Filet {
 
         // this.game.enemies.add(this.widget);
         
+    }
+
+    capture(flock) {
+        let filet = this;
+        flock.children.iterate(function (fish) {
+            if (Phaser.Geom.Rectangle.Contains(filet.widget.getBounds(), fish.x, fish.y)) {
+                if (fish.body.acceleration.x < 0) {
+                    fish.body.acceleration.x = 0;
+                }
+            }
+        })
+        if(this.game.physics.world.bounds.right < this.widget.getBounds().left) {
+
+        }
     }
 
 
