@@ -62,7 +62,7 @@ function create ()
 function makeFilet() {
     if (! this.filet) {
         this.filet = new Filet(this);
-        this.getLost = makeFilet;
+        this.filet.getLost = makeFilet;
     }
     this.filet.moveTo(-20, Phaser.Math.Between(this.filet.getBounds().height/2, config.height - this.filet.getBounds().height/2));
     this.enemies.push(this.filet);
@@ -80,7 +80,7 @@ function update (time, delta)
             enemie.capture(this.flock);
             i++
         } else {
-            this.getLost.call(this);
+            enemie.getLost.call(this);
             this.enemies.slice(i);
         }
     }
