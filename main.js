@@ -1,7 +1,8 @@
 var game;
 
-var MainGame = new Phaser.Class({
+var Starter = new Phaser.Class({
     Extends: Phaser.Scene,
+
     preload: function ()
     {
         this.load.image('fish', 'assets/poisson-carre.png');
@@ -9,6 +10,40 @@ var MainGame = new Phaser.Class({
         this.load.image('shark', 'assets/requin.png');
         this.load.image('background', 'assets/fond.png');
     },
+
+    create: function ()
+    {
+        this.scene.add("game", MainGame, false);
+        this.scene.add("menu", Menu, false);
+        this.scene.add("gameover", GameOver, false);
+    },
+
+    update: function ()
+    {
+        this.scene.start("menu", null);
+    }
+})
+
+var Menu =  new Phaser.Class({
+    Extends: Phaser.Scene,
+
+    update: function () 
+    {
+        this.scene.start("game", null);
+    }
+})
+
+var GameOver =  new Phaser.Class({
+    Extends: Phaser.Scene,
+
+    update: function() 
+    {
+        this.scene.start("game", null);
+    }
+})
+
+var MainGame = new Phaser.Class({
+    Extends: Phaser.Scene,
 
     create: function ()
     {
@@ -102,7 +137,7 @@ var config = {
             debug: true,
         }
     },
-    scene: [ MainGame ],
+    scene: [ Starter ],
     numFish: 30,
     parent: "game"
 };
