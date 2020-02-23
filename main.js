@@ -132,7 +132,7 @@ var MainGame = new Phaser.Class({
         for (let i = 0; i<this.enemies.length; ) {
             let enemie = this.enemies[i];
             if (Phaser.Geom.Rectangle.Overlaps(this.physics.world.bounds, enemie.getBounds())) {
-                enemie.capture(this.flock);
+                enemie.capture(this.flock, delta);
                 i++
             } else {
                 enemie.getLost.call(this);

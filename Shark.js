@@ -29,6 +29,7 @@ class Shark {
 
         //this.game.physics.add.collider(this.game.flock, widget);
         this.group.setVelocity(0, -190);
+        this.velocity = 190;
         widget.setBounce(0);
 
         // this.game.enemies.add(this.widget);
@@ -50,13 +51,16 @@ class Shark {
         return rect;
     }
 
-    capture(flock) {
+    capture(flock, delta) {
         let mouth = this.mouth;
         flock.children.each(function (fish) {
             if (Phaser.Geom.Rectangle.Contains(mouth.getBounds(), fish.x, fish.y)) {
                 fish.destroy()
             }
         });
+        this.velocity += delta/this.velocity/5;
+        this.group.setVelocity(0, -this.velocity);
+
     }
     moveTo(x, y) {
         this.widget.x = x;
