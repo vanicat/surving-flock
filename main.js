@@ -106,6 +106,6 @@ function update (time, delta)
     }
 
     remove_far(this, this.flock);
-    this.score += this.flock.countActive() * delta/1000;
+    this.score += this.flock.countActive() * delta/100;
     this.scoreText.setText('Score: ' + Math.ceil(this.score));
 }
