@@ -50,13 +50,33 @@ function create ()
     }
     this.physics.add.collider(this.flock, this.flock)
     flock(this.flock);
-    this.filet = new Filet(this);
+    this.enemies = [];
+    this.firstFiletTimer = this.time.addEvent({
+        delay: 2000,
+        callback: makeFilet,
+        callbackScope: this
+    })
 }
+
+function makeFilet() {
+    if (! this.filet) {
+        this.filet = new Filet(this);
+    }
+    this.filet.moveTo(-20, Phaser.Math.Between(0, config.height));
+    this.enemies.push(this.filet);
+
+}
+
 
 function update (time, delta)
 {
     flock(this.flock);
-    this.filet.capture(this.flock);
+    for (let enemie of this.enemies) {
+        enemie.capture(this.flock);
+    }
+
+    let world = this.physics.world
+    this.enemies.filter(function (enemie) {return Phaser.Geom.Rectangle.Overlaps(world.bounds, enemie.getBounds())});
     remove_far(this, this.flock);
     this.score += this.flock.countActive() * delta/1000;
     this.scoreText.setText('Score: ' + Math.ceil(this.score));
