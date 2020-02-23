@@ -62,6 +62,7 @@ function create ()
 function makeFilet() {
     if (! this.filet) {
         this.filet = new Filet(this);
+        this.getLost = makeFilet;
     }
     this.filet.moveTo(-20, Phaser.Math.Between(0, config.height));
     this.enemies.push(this.filet);
@@ -72,12 +73,18 @@ function makeFilet() {
 function update (time, delta)
 {
     flock(this.flock);
-    for (let enemie of this.enemies) {
-        enemie.capture(this.flock);
+
+    for (let i = 0; i<this.enemies.length; ) {
+        let enemie = this.enemies[i];
+        if (Phaser.Geom.Rectangle.Overlaps(this.physics.world.bounds, enemie.getBounds())) {
+            enemie.capture(this.flock);
+            i++
+        } else {
+            this.getLost.call(this);
+            this.enemies.slice(i);
+        }
     }
 
-    let world = this.physics.world
-    this.enemies.filter(function (enemie) {return Phaser.Geom.Rectangle.Overlaps(world.bounds, enemie.getBounds())});
     remove_far(this, this.flock);
     this.score += this.flock.countActive() * delta/1000;
     this.scoreText.setText('Score: ' + Math.ceil(this.score));
