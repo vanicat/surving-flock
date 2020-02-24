@@ -18,4 +18,4 @@ Done in javascript using :
   - [removebg](https://www.remove.bg/) for transparency
   - Paint3D for cropping.
 - But mostly this is a [Phaser 3](http://phaser.io/) game for rendering, physics, ...
-
+- The flocking algorithm is vastly inspired by a [processing](https://www.processing.org/) [example](https://www.processing.org/examples/flocking.html)
