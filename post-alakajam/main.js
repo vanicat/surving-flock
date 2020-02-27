@@ -20,7 +20,7 @@ var Starter = new Phaser.Class({
     update: function() {
         this.scene.start("menu", null);
     }
-})
+});
 
 var Menu = new Phaser.Class({
     Extends: Phaser.Scene,
@@ -32,7 +32,7 @@ var Menu = new Phaser.Class({
         this.flock = this.physics.add.group();
 
         for (let i = 0; i < config.numFish / 2; i++) {
-            let y = config.height * (i + 5) / (config.numFish + 10)
+            let y = config.height * (i + 5) / (config.numFish + 10);
 
             newFich(this.flock, fromLimit, y);
             newFich(this.flock, config.width - fromLimit, y);
@@ -44,14 +44,14 @@ var Menu = new Phaser.Class({
 
         let startButton = this.add.text(this.physics.world.bounds.centerX - 200, 300, 'Click to start Start Game', config.textStyle);
         this.physics.add.existing(startButton);
-        startButton.body.immovable = true
+        startButton.body.immovable = true;
 
-        let scene = this.scene
+        let scene = this.scene;
         this.input.once('pointerup', function(pointer) {
             scene.start("game");
-        })
+        });
 
-        this.physics.add.collider(startButton, this.flock)
+        this.physics.add.collider(startButton, this.flock);
 
 
         //startButton = this.add.text(this.physics.world.bounds.centerX, 16, 'Start Game', config.textStyle);
@@ -63,7 +63,7 @@ var Menu = new Phaser.Class({
         flock(this.flock);
 
     }
-})
+});
 
 var GameOver = new Phaser.Class({
     Extends: Phaser.Scene,
@@ -81,7 +81,7 @@ var GameOver = new Phaser.Class({
         }, this);
 
     }
-})
+});
 
 var MainGame = new Phaser.Class({
     Extends: Phaser.Scene,
@@ -100,7 +100,7 @@ var MainGame = new Phaser.Class({
             let y = config.height / 2 + 50 * Math.cos(2 * Math.PI * i / config.numFish);
 
             newFich(this.flock, x, y);
-        };
+        }
         this.physics.add.collider(this.flock, this.flock);
         // flock(this.flock); for debug
 
@@ -130,8 +130,8 @@ var MainGame = new Phaser.Class({
             } else {
                 enemie.getLost.call(this);
                 this.enemies.slice(i);
-            };
-        };
+            }
+        }
 
         remove_far(this, this.flock);
         this.score += this.flock.countActive() * delta / 100;
@@ -145,7 +145,7 @@ var MainGame = new Phaser.Class({
                 posy: this.physics.world.bounds.centerY,
                 me: this
             });
-        };
+        }
     }
 });
 
@@ -155,32 +155,32 @@ function newFich(flock, x, y) {
     newobj.setBounce(1);
     newobj.setCircle(newobj.width / 2);
     newobj.setScale(0.05);
-};
+}
 
 function makeFilet() {
     if (!this.filet) {
         this.filet = new Filet(this);
         this.filet.getLost = makeFilet;
-    };
+    }
     this.filet.moveTo(-20, Phaser.Math.Between(this.filet.getBounds().height / 2, config.height - this.filet.getBounds().height / 2));
     this.enemies.push(this.filet);
-};
+}
 
 
 function makeShark() {
     if (!this.shark) {
         this.shark = new Shark(this);
         this.shark.getLost = makeShark;
-    };
+    }
     if (this.flock.countActive() > 0) {
         let i = Phaser.Math.Between(0, this.flock.countActive() - 1);
         let x = this.flock.getChildren()[i].x;
         this.shark.moveTo(x, config.height);
     } else {
         this.shark.moveTo(game.input.mousePointer.x, config.height);
-    };
+    }
     this.enemies.push(this.shark);
-};
+}
 
 
 var config = {
@@ -202,4 +202,4 @@ var config = {
 
 function main() {
     game = new Phaser.Game(config);
-};
+}

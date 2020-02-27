@@ -6,22 +6,22 @@ const NEIGHBORDIST = 100;
 const CONTROLDIST = 200;
 
 function multArray(a, x) {
-    for (let i = 0; i<a.length; i++) {
+    for (let i = 0; i < a.length; i++) {
         a[i].scale(x);
     }
 }
 
 function addArray(a, b) {
-    for (let i = 0; i<a.length; i++) {
+    for (let i = 0; i < a.length; i++) {
         a[i].add(b[i]);
     }
 }
 
 function boid_accel(boid, group) {
     // if (boid === group.children.entries[0]) debugger;
-    let sep = separate(boid, group);   // Separation
-    let ali = align(boid, group);      // Alignment
-    let coh = cohesion(boid, group);   // Cohesion
+    let sep = separate(boid, group); // Separation
+    let ali = align(boid, group); // Alignment
+    let coh = cohesion(boid, group); // Cohesion
     let cont = control(boid);
 
     sep.scale(30);
@@ -29,13 +29,13 @@ function boid_accel(boid, group) {
     coh.scale(8);
     cont.scale(25);
 
-    boid.body.acceleration.setToPolar(Phaser.Math.RND.angle(), Phaser.Math.RND.realInRange(0,5));
+    boid.body.acceleration.setToPolar(Phaser.Math.RND.angle(), Phaser.Math.RND.realInRange(0, 5));
     boid.body.acceleration.add(sep);
-    
+
     boid.body.acceleration.add(ali);
-    
+
     boid.body.acceleration.add(coh);
-    boid.body.acceleration.add(cont);  
+    boid.body.acceleration.add(cont);
 }
 
 
@@ -48,7 +48,7 @@ function flock(group) {
 function seek(boid, target) {
     let desired = new Phaser.Math.Vector2(boid.x, boid.y);
     desired.subtract(target);
-    if(desired.length() === 0) {
+    if (desired.length() === 0) {
         return desired;
     }
 
@@ -75,37 +75,37 @@ function separate(boid, group) {
     let steer = new Phaser.Math.Vector2(0, 0);
     let count = 0;
     // For every boid in the system, check if it's too close
-    group.children.iterate(function (other) {
+    group.children.iterate(function(other) {
         if (other !== boid) {
             let d = boid.body.position.distance(other.body.position);
             if ((d > 0) && (d < DESIREDSEP)) {
                 let diff = boid.body.position.clone();
                 diff.subtract(other.body.position);
                 diff.normalize();
-                diff.scale(1/d);        // Weight by distance
+                diff.scale(1 / d); // Weight by distance
                 steer.add(diff);
-                count++;            // Keep track of how many
+                count++; // Keep track of how many
             }
         }
     });
 
     // Average -- divide by how many
     if (count > 0) {
-      steer.scale(1/count);
+        steer.scale(1 / count);
     }
-    
+
 
     // As long as the vector is greater than 0
     if (steer.length() > 0) {
-      // First two lines of code below could be condensed with new Phaser.Math.Vector2 setMag() method
-      // Not using this method until Processing.js catches up
-      // steer.setMag(maxspeed);
+        // First two lines of code below could be condensed with new Phaser.Math.Vector2 setMag() method
+        // Not using this method until Processing.js catches up
+        // steer.setMag(maxspeed);
 
-      // Implement Reynolds: Steering = Desired - Velocity
-      steer.normalize();
-      steer.scale(MAXSPEED);
-      steer.subtract(boid.body.velocity);
-      limitVector(steer,MAXFORCE);
+        // Implement Reynolds: Steering = Desired - Velocity
+        steer.normalize();
+        steer.scale(MAXSPEED);
+        steer.subtract(boid.body.velocity);
+        limitVector(steer, MAXFORCE);
     }
     return steer;
 }
@@ -119,23 +119,22 @@ function align(boid, group) {
             sum.add(other.body.velocity);
             count++;
         }
-    })
+    });
     if (count > 0) {
         sum.normalize();
         sum.scale(MAXSPEED);
         sum.subtract(boid.body.velocity);
         limitVector(sum, MAXFORCE);
         return sum;
-    } 
-    else {
+    } else {
         return new Phaser.Math.Vector2(0, 0);
     }
 }
 
 function cohesion(boid, group) {
-    let sum = new Phaser.Math.Vector2(0, 0);   // Start with empty vector to accumulate all positions
+    let sum = new Phaser.Math.Vector2(0, 0); // Start with empty vector to accumulate all positions
     let count = 0;
-    group.children.iterate(function (other) {
+    group.children.iterate(function(other) {
         let d = boid.body.position.distance(other.body.position);
         if ((d > 0) && (d < NEIGHBORDIST)) {
             sum.add(other.body.position); // Add position
@@ -143,9 +142,9 @@ function cohesion(boid, group) {
         }
     });
     if (count > 0) {
-        sum.scale(1/count);
-        let s = seek(boid, sum); 
-        return s;  // Steer towards the position
+        sum.scale(1 / count);
+        let s = seek(boid, sum);
+        return s; // Steer towards the position
     } else {
         return new Phaser.Math.Vector2(0, 0);
     }
@@ -168,10 +167,10 @@ function control(boid) {
 
 function remove_far(scene, flock) {
     let bounds = scene.physics.world.bounds;
-    let rect = new Phaser.Geom.Rectangle(bounds.x - 100, bounds.y - 100, bounds.width + 2*100, bounds.height + 2*100);
-    flock.children.each(function (fish) {
-        if (! rect.contains(fish.x, fish.y)) {
+    let rect = new Phaser.Geom.Rectangle(bounds.x - 100, bounds.y - 100, bounds.width + 2 * 100, bounds.height + 2 * 100);
+    flock.children.each(function(fish) {
+        if (!rect.contains(fish.x, fish.y)) {
             fish.destroy();
         }
-    })
+    });
 }

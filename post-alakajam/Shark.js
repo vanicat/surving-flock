@@ -40,12 +40,12 @@ class Shark {
         let topProp = (top / 604 - 0.5) * widget.height;
         let bottomProp = (bottom / 604 - 0.5) * widget.height;
 
-        let x = (leftProp + rightProp) / 2
-        let y = (topProp + bottomProp) / 2
+        let x = (leftProp + rightProp) / 2;
+        let y = (topProp + bottomProp) / 2;
 
         let rect = new Phaser.GameObjects.Rectangle(this.game, x, y, rightProp - leftProp, bottomProp - topProp);
         rect.depth = -1;
-        rect.shift = { x: x, y: y}
+        rect.shift = { x: x, y: y };
         this.group.add(rect);
         rect.body.immovable = true;
         return rect;
@@ -53,12 +53,12 @@ class Shark {
 
     capture(flock, delta) {
         let mouth = this.mouth;
-        flock.children.each(function (fish) {
+        flock.children.each(function(fish) {
             if (Phaser.Geom.Rectangle.Contains(mouth.getBounds(), fish.x, fish.y)) {
-                fish.destroy()
+                fish.destroy();
             }
         });
-        this.velocity += delta/this.velocity/5;
+        this.velocity += delta / this.velocity / 5;
         this.group.setVelocity(0, -this.velocity);
 
     }
@@ -66,7 +66,7 @@ class Shark {
         this.widget.x = x;
         this.widget.y = y;
 
-        for (let rect of [this.body, this.mouth, this.leftJaw, this.rightJaw]) {
+        for (let rect of[this.body, this.mouth, this.leftJaw, this.rightJaw]) {
             rect.x = x + rect.shift.x;
             rect.y = y + rect.shift.y;
         }
