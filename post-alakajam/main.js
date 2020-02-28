@@ -12,7 +12,6 @@ var Starter = new Phaser.Class({
     },
 
     create: function() {
-        console.log('Starter')
         this.scene.add("game", MainGame, false);
         this.scene.add("menu", Menu, false);
         this.scene.add("gameover", GameOver, false);
@@ -27,7 +26,6 @@ var Menu = new Phaser.Class({
     Extends: Phaser.Scene,
 
     create: function() {
-        console.log('Menu')
         let fromLimit = 200;
         this.add.image(config.width / 2, config.height / 2, 'background');
 
@@ -71,7 +69,6 @@ var GameOver = new Phaser.Class({
     Extends: Phaser.Scene,
 
     create: function(data) {
-        console.log('GameOver');
         GameOver = this.add.text(data.posx, data.posy, 'GAMEOVER', config.textStyle);
         SCORE = this.add.text(data.posx, data.posy + GameOver.height * 1.5, 'Score: ' + data.score, config.textStyle);
         this.input.once('pointerup', function(event) {
@@ -89,8 +86,6 @@ var MainGame = new Phaser.Class({
     Extends: Phaser.Scene,
 
     create: function() {
-        console.log('MainGame')
-
         this.add.image(config.width / 2, config.height / 2, 'background');
 
         this.score = 0;
