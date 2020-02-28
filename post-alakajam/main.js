@@ -6,12 +6,13 @@ var Starter = new Phaser.Class({
 
     preload: function() {
         this.load.image('fish', 'assets/poisson-carre.png');
-        this.load.image('filet', 'assets/filet1.png');
+        this.load.image('net', 'assets/filet1.png');
         this.load.image('shark', 'assets/requin.png');
         this.load.image('background', 'assets/fond.png');
     },
 
     create: function() {
+        console.log('Starter')
         this.scene.add("game", MainGame, false);
         this.scene.add("menu", Menu, false);
         this.scene.add("gameover", GameOver, false);
@@ -26,6 +27,7 @@ var Menu = new Phaser.Class({
     Extends: Phaser.Scene,
 
     create: function() {
+        console.log('Menu')
         let fromLimit = 200;
         this.add.image(config.width / 2, config.height / 2, 'background');
 
@@ -69,11 +71,11 @@ var GameOver = new Phaser.Class({
     Extends: Phaser.Scene,
 
     create: function(data) {
-        console.log(data);
+        console.log('GameOver');
         GameOver = this.add.text(data.posx, data.posy, 'GAMEOVER', config.textStyle);
         SCORE = this.add.text(data.posx, data.posy + GameOver.height * 1.5, 'Score: ' + data.score, config.textStyle);
         this.input.once('pointerup', function(event) {
-            data.me.filet = null;
+            data.me.net = null;
             data.me.shark = null;
             this.scene.stop('game');
             this.scene.start('menu');
@@ -87,6 +89,7 @@ var MainGame = new Phaser.Class({
     Extends: Phaser.Scene,
 
     create: function() {
+        console.log('MainGame')
 
         this.add.image(config.width / 2, config.height / 2, 'background');
 
@@ -106,9 +109,9 @@ var MainGame = new Phaser.Class({
 
         this.enemies = [];
 
-        this.firstFiletTimer = this.time.addEvent({
+        this.firstNetTimer = this.time.addEvent({
             delay: 2000,
-            callback: makeFilet,
+            callback: makeNet,
             callbackScope: this
         });
 
@@ -157,13 +160,13 @@ function newFich(flock, x, y) {
     newobj.setScale(0.05);
 }
 
-function makeFilet() {
-    if (!this.filet) {
-        this.filet = new Filet(this);
-        this.filet.getLost = makeFilet;
+function makeNet() {
+    if (!this.net) {
+        this.net = new Net(this);
+        this.net.getLost = makeNet;
     }
-    this.filet.moveTo(-20, Phaser.Math.Between(this.filet.getBounds().height / 2, config.height - this.filet.getBounds().height / 2));
-    this.enemies.push(this.filet);
+    this.net.moveTo(-20, Phaser.Math.Between(this.net.getBounds().height / 2, config.height - this.net.getBounds().height / 2));
+    this.enemies.push(this.net);
 }
 
 
