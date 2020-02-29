@@ -5,18 +5,6 @@ const DESIREDSEP = 20.0;
 const NEIGHBORDIST = 100;
 const CONTROLDIST = 200;
 
-function multArray(a, x) {
-    for (let i = 0; i < a.length; i++) {
-        a[i].scale(x);
-    }
-}
-
-function addArray(a, b) {
-    for (let i = 0; i < a.length; i++) {
-        a[i].add(b[i]);
-    }
-}
-
 function boid_accel(boid, group) {
     // if (boid === group.children.entries[0]) debugger;
     let sep = separate(boid, group); // Separation
