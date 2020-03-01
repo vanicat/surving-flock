@@ -93,7 +93,7 @@ var MainGame = new Phaser.Class({
         this.score = 0;
         this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
 
-        this.flock = new Flock(this, config.numFish);
+        this.flock = new Flock(this);
 
         for (let i = 0; i < config.numFish; i++) {
             let x = config.width / 2 + 50 * Math.sin(2 * Math.PI * i / config.numFish);
