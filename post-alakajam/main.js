@@ -29,18 +29,14 @@ var Menu = new Phaser.Class({
         let fromLimit = 200;
         this.add.image(config.width / 2, config.height / 2, 'background');
 
-        this.flock = this.physics.add.group();
+        this.flock = new Flock(this);
 
         for (let i = 0; i < config.numFish / 2; i++) {
             let y = config.height * (i + 5) / (config.numFish + 10);
 
-            newFich(this.flock, fromLimit, y);
-            newFich(this.flock, config.width - fromLimit, y);
+            this.flock.newFich(fromLimit, y);
+            this.flock.newFich(config.width - fromLimit, y);
         }
-
-        var color = new Phaser.Display.Color();
-        color.random(50);
-
 
         let startButton = this.add.text(this.physics.world.bounds.centerX - 200, 300, 'Click to start Start Game', config.textStyle);
         this.physics.add.existing(startButton);
@@ -51,7 +47,7 @@ var Menu = new Phaser.Class({
             scene.start("game");
         });
 
-        this.physics.add.collider(startButton, this.flock);
+        this.physics.add.collider(startButton, this.flock.group);
 
 
         //startButton = this.add.text(this.physics.world.bounds.centerX, 16, 'Start Game', config.textStyle);
@@ -60,7 +56,7 @@ var Menu = new Phaser.Class({
     },
 
     update: function() {
-        flock(this.flock);
+        this.flock.update();
 
     }
 });
@@ -91,15 +87,15 @@ var MainGame = new Phaser.Class({
         this.score = 0;
         this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
 
-        this.flock = this.physics.add.group();
+        this.flock = new Flock(this, config.numFish);
 
         for (let i = 0; i < config.numFish; i++) {
             let x = config.width / 2 + 50 * Math.sin(2 * Math.PI * i / config.numFish);
             let y = config.height / 2 + 50 * Math.cos(2 * Math.PI * i / config.numFish);
 
-            newFich(this.flock, x, y);
+            this.flock.newFich(x, y);
         }
-        this.physics.add.collider(this.flock, this.flock);
+        //this.physics.add.collider(this.flock, this.flock);
         // flock(this.flock); for debug
 
         this.enemies = [];
@@ -118,7 +114,7 @@ var MainGame = new Phaser.Class({
     },
 
     update: function(time, delta) {
-        flock(this.flock);
+        this.flock.update();
 
         for (let i = 0; i < this.enemies.length;) {
             let enemie = this.enemies[i];
@@ -131,11 +127,10 @@ var MainGame = new Phaser.Class({
             }
         }
 
-        remove_far(this, this.flock);
-        this.score += this.flock.countActive() * delta / 100;
+        this.score += this.flock.count * delta / 100;
         this.scoreText.setText('Score: ' + Math.ceil(this.score));
 
-        if (this.flock.countActive() === 0 && !this.gameover) {
+        if (this.flock.count === 0 && !this.gameover) {
             this.gameover = true;
             this.scene.launch("gameover", {
                 score: Math.ceil(this.score),
@@ -147,13 +142,6 @@ var MainGame = new Phaser.Class({
     }
 });
 
-
-function newFich(flock, x, y) {
-    let newobj = flock.create(x, y, 'fish');
-    newobj.setBounce(1);
-    newobj.setCircle(newobj.width / 2);
-    newobj.setScale(0.05);
-}
 
 function makeNet() {
     if (!this.net) {
@@ -170,9 +158,9 @@ function makeShark() {
         this.shark = new Shark(this);
         this.shark.getLost = makeShark;
     }
-    if (this.flock.countActive() > 0) {
-        let i = Phaser.Math.Between(0, this.flock.countActive() - 1);
-        let x = this.flock.getChildren()[i].x;
+    if (this.flock.count > 0) {
+        let i = Phaser.Math.Between(0, this.flock.count - 1);
+        let x = this.flock.boids.entries[i].x;
         this.shark.moveTo(x, config.height);
     } else {
         this.shark.moveTo(game.input.mousePointer.x, config.height);

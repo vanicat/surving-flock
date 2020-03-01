@@ -39,10 +39,9 @@ class Net {
         rect3.body.immovable = true;
         this.rect3 = rect3;
 
-        this.game.physics.add.collider(rect1, this.game.flock);
-        this.game.physics.add.collider(rect2, this.game.flock);
-        this.game.physics.add.collider(rect3, this.game.flock);
-        //this.game.physics.add.collider(this.game.flock, widget);
+        this.game.physics.add.collider(rect1, this.game.flock.group);
+        this.game.physics.add.collider(rect2, this.game.flock.group);
+        this.game.physics.add.collider(rect3, this.game.flock.group);
 
         this.group.setVelocity(50, 0);
         widget.setBounce(0);
@@ -53,7 +52,7 @@ class Net {
 
     capture(flock) {
         let net = this;
-        flock.children.iterate(function(fish) {
+        flock.boids.iterate(function(fish) {
             if (Phaser.Geom.Rectangle.Contains(net.widget.getBounds(), fish.x, fish.y)) {
                 if (fish.body.acceleration.x < 0) {
                     fish.body.acceleration.x = 0;

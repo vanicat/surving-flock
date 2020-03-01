@@ -27,11 +27,6 @@ function boid_accel(boid, group) {
 }
 
 
-function flock(group) {
-    group.children.iterate(function(boid) {
-        boid_accel(boid, group);
-    });
-}
 
 function seek(boid, target) {
     let desired = new Phaser.Math.Vector2(boid.x, boid.y);
@@ -153,12 +148,39 @@ function control(boid) {
     }
 }
 
-function remove_far(scene, flock) {
-    let bounds = scene.physics.world.bounds;
-    let rect = new Phaser.Geom.Rectangle(bounds.x - 100, bounds.y - 100, bounds.width + 2 * 100, bounds.height + 2 * 100);
-    flock.children.each(function(fish) {
-        if (!rect.contains(fish.x, fish.y)) {
-            fish.destroy();
-        }
-    });
+class Flock {
+    constructor(scene) {
+        this.scene = scene;
+        this.group = scene.physics.add.group();
+    }
+
+    newFich(x, y) {
+        let newobj = this.group.create(x, y, 'fish');
+        newobj.setBounce(1);
+        newobj.setScale(0.05);
+        newobj.setCircle(newobj.width / 2);
+    }
+
+    update() {
+        let me = this;
+        this.group.children.iterate(function(boid) {
+            boid_accel(boid, me.group);
+        });
+
+        let bounds = this.scene.physics.world.bounds;
+        let rect = new Phaser.Geom.Rectangle(bounds.x - 100, bounds.y - 100, bounds.width + 2 * 100, bounds.height + 2 * 100);
+        this.boids.each(function(fish) {
+            if (!rect.contains(fish.x, fish.y)) {
+                fish.destroy();
+            }
+        });
+    }
+
+    get boids() {
+        return this.group.children;
+    }
+
+    get count() {
+        return this.group.countActive();
+    }
 }

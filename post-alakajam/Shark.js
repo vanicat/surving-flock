@@ -23,11 +23,10 @@ class Shark {
         let rightJaw = this.createRect(widget, 220, 238, 190, 220);
         this.rightJaw = rightJaw;
 
-        this.game.physics.add.collider(body, this.game.flock);
-        this.game.physics.add.collider(leftJaw, this.game.flock);
-        this.game.physics.add.collider(rightJaw, this.game.flock);
+        this.game.physics.add.collider(body, this.game.flock.group);
+        this.game.physics.add.collider(leftJaw, this.game.flock.group);
+        this.game.physics.add.collider(rightJaw, this.game.flock.group);
 
-        //this.game.physics.add.collider(this.game.flock, widget);
         this.group.setVelocity(0, -190);
         this.velocity = 190;
         widget.setBounce(0);
@@ -53,7 +52,7 @@ class Shark {
 
     capture(flock, delta) {
         let mouth = this.mouth;
-        flock.children.each(function(fish) {
+        flock.boids.each(function(fish) {
             if (Phaser.Geom.Rectangle.Contains(mouth.getBounds(), fish.x, fish.y)) {
                 fish.destroy();
             }
