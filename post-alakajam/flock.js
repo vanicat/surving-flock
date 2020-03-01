@@ -167,10 +167,9 @@ class Flock {
             boid_accel(boid, me.group);
         });
 
-        let bounds = this.scene.physics.world.bounds;
-        let rect = new Phaser.Geom.Rectangle(bounds.x - 100, bounds.y - 100, bounds.width + 2 * 100, bounds.height + 2 * 100);
+        let bounds = this.scene.bounds;
         this.boids.each(function(fish) {
-            if (!rect.contains(fish.x, fish.y)) {
+            if (!bounds.contains(fish.x, fish.y)) {
                 fish.destroy();
             }
         });

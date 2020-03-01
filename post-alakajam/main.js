@@ -26,6 +26,9 @@ var Menu = new Phaser.Class({
     Extends: Phaser.Scene,
 
     create: function() {
+        let bounds = this.physics.world.bounds;
+        this.bounds = new Phaser.Geom.Rectangle(bounds.x - 100, bounds.y - 100, bounds.width + 2 * 100, bounds.height + 2 * 100);
+
         let fromLimit = 200;
         this.add.image(config.width / 2, config.height / 2, 'background');
 
@@ -82,6 +85,9 @@ var MainGame = new Phaser.Class({
     Extends: Phaser.Scene,
 
     create: function() {
+        let bounds = this.physics.world.bounds;
+        this.bounds = new Phaser.Geom.Rectangle(bounds.x - 100, bounds.y - 100, bounds.width + 2 * 100, bounds.height + 2 * 100);
+
         this.add.image(config.width / 2, config.height / 2, 'background');
 
         this.score = 0;
